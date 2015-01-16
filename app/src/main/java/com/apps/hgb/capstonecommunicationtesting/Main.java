@@ -1,6 +1,7 @@
 package com.apps.hgb.capstonecommunicationtesting;
 
 import android.app.Activity;
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -10,6 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 
 
 public class Main extends Activity {
@@ -25,11 +30,24 @@ public class Main extends Activity {
         if (_aru != null) {
             _aru.startRecording();
             int shortsRead = _aru.read(buffer, 0, buffer.length);
-            //String s = new String(shortsRead);
-            textView.setText(String.valueOf(shortsRead));
+            double average = Average(buffer);
+            textView.setText(String.valueOf(shortsRead) + "\nAverage: " + String.valueOf(average));
         }
-        else
+        else {
             textView.setText("AudioRecord is null");
+        }
+
+        String text = "";
+        if (buffer.length > 10)
+            for (int i = 0; i < 300; i++) {
+                String num = "" + i;
+                String val = Short.toString(buffer[i]);
+                text += "\n" + num + ", " + val;
+            }
+        //processInputBuffer(shortsRead2);
+        WriteToFile(text);
+
+
     }
 
     public void clearClick(View v) {
@@ -43,6 +61,32 @@ public class Main extends Activity {
         buffer = new short[recBufferSize * 10];
         _aru = findAudioRecord();
         textView = (TextView) findViewById(R.id.textView);
+    }
+
+    private double Average(short[] bytes)
+    {
+        double sum = 0;
+        for (int i = 0; i < bytes.length; i++) {
+            Short s = new Short(bytes[i]);
+            sum = sum + s.doubleValue();
+        }
+        return sum / bytes.length;
+    }
+
+    public void WriteToFile(String content)
+    {
+        OutputStream fos;
+        try {
+            fos = openFileOutput("dump.txt", Context.MODE_WORLD_READABLE);
+            fos.write(content.getBytes());
+            fos.close();
+        }
+        catch (FileNotFoundException e)
+        {
+        }
+        catch (IOException e)
+        {
+        }
     }
 
     private AudioRecord findAudioRecord()
