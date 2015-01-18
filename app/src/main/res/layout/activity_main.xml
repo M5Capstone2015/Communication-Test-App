@@ -43,4 +43,18 @@
         android:layout_below="@+id/readButton"
         android:layout_centerHorizontal="true" />
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/dataText" />
+    </ScrollView>
+
 </RelativeLayout>

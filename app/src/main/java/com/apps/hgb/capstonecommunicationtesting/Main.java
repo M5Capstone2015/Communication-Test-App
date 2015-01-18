@@ -20,6 +20,7 @@ import java.io.OutputStream;
 public class Main extends Activity {
 
     TextView textView = null;
+    TextView dataTextView = null;
     private static int[] mSampleRates = new int[]{8000, 11025, 22050, 44100};
     AudioRecord _aru = null;
     short[] buffer = null;
@@ -45,6 +46,7 @@ public class Main extends Activity {
                 text += "\n" + num + ", " + val;
             }
         //processInputBuffer(shortsRead2);
+        dataTextView.setText(text);
         WriteToFile(text);
 
 
@@ -61,13 +63,14 @@ public class Main extends Activity {
         buffer = new short[recBufferSize * 10];
         _aru = findAudioRecord();
         textView = (TextView) findViewById(R.id.textView);
+        dataTextView = (TextView) findViewById(R.id.dataText);
     }
 
     private double Average(short[] bytes)
     {
         double sum = 0;
         for (int i = 0; i < bytes.length; i++) {
-            Short s = new Short(bytes[i]);
+            Short s = bytes[i];
             sum = sum + s.doubleValue();
         }
         return sum / bytes.length;
