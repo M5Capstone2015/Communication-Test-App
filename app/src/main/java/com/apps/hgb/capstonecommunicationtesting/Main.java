@@ -19,12 +19,15 @@ import java.io.OutputStream;
 
 public class Main extends Activity {
 
-    TextView textView = null;
     TextView dataTextView = null;
     private static int[] mSampleRates = new int[]{8000, 11025, 22050, 44100};
     AudioRecord _aru = null;
     short[] buffer = null;
 
+    public void saveClick(View v) {
+        String text = dataTextView.getText().toString();
+        WriteToFile(text);
+    }
 
     public void readClick(View v) {
         // Run AudioRecord and Save to file. Print average to and num read.
@@ -32,10 +35,10 @@ public class Main extends Activity {
             _aru.startRecording();
             int shortsRead = _aru.read(buffer, 0, buffer.length);
             double average = Average(buffer);
-            textView.setText(String.valueOf(shortsRead) + "\nAverage: " + String.valueOf(average));
+            //textView.setText(String.valueOf(shortsRead) + "\nAverage: " + String.valueOf(average));
         }
         else {
-            textView.setText("AudioRecord is null");
+            //textView.setText("AudioRecord is null");
         }
 
         String text = "";
@@ -53,7 +56,8 @@ public class Main extends Activity {
     }
 
     public void clearClick(View v) {
-        textView.setText("");
+        //textView.setText("");
+        dataTextView.setText("");
     }
 
     private void initialize()
@@ -62,7 +66,7 @@ public class Main extends Activity {
                 AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
         buffer = new short[recBufferSize * 10];
         _aru = findAudioRecord();
-        textView = (TextView) findViewById(R.id.textView);
+        //_aru = initAudio4k();
         dataTextView = (TextView) findViewById(R.id.dataText);
     }
 
@@ -80,7 +84,7 @@ public class Main extends Activity {
     {
         OutputStream fos;
         try {
-            fos = openFileOutput("dump.txt", Context.MODE_WORLD_READABLE);
+            fos = openFileOutput("dump.csv", Context.MODE_WORLD_READABLE);
             fos.write(content.getBytes());
             fos.close();
         }
@@ -90,6 +94,12 @@ public class Main extends Activity {
         catch (IOException e)
         {
         }
+    }
+
+    private AudioRecord initAudio4k()
+    {
+        int bufferSize = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_8BIT);
+        return new AudioRecord(MediaRecorder.AudioSource.DEFAULT, 44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_8BIT, bufferSize);
     }
 
     private AudioRecord findAudioRecord()
