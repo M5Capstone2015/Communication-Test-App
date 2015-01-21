@@ -45,24 +45,24 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="200dp"
         android:id="@+id/scrollView" >
 
         <TextView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="Data Here..."
+            android:layout_height="wrap_content"
+            android:text="Raw Data Here..."
             android:id="@+id/dataText" />
     </ScrollView>
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="200dp"
         android:id="@+id/scrollView2" >
 
         <TextView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="Data Here..."
+            android:layout_height="wrap_content"
+            android:text="HiJack Data Here..."
             android:id="@+id/hijackData" />
     </ScrollView>
 

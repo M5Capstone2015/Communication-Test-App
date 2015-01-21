@@ -332,6 +332,8 @@ public class AudioReceiver {
     //
     public List<Integer> fakeAudioRead()  // Change this to return any freq coefficients.
     {
+        _freqStack.clear();
+
         int shortsRead = _audioRecord.read(_recBuffer, 0, _recBuffer.length);
         processInputBuffer(shortsRead);
         return _freqStack;
@@ -339,6 +341,20 @@ public class AudioReceiver {
         //System.out.println("data size: " + _recBuffer.length);
         //processInputBuffer(_recBuffer.length);
     }
+
+    public List<Integer> fakeAudioRead(List<Short> data)  // Change this to return any freq coefficients.
+    {
+        _freqStack.clear();
+
+        _recBuffer = new short[data.size() + 1];
+
+        for (int i = 0; i < data.size(); i++)
+            _recBuffer[i] = data.get(i);
+
+        processInputBuffer(data.size());
+        return _freqStack;
+    }
+
 
 
 

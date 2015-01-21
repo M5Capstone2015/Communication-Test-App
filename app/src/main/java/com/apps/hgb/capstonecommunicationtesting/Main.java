@@ -23,7 +23,7 @@ public class Main extends Activity {
 
     TextView dataTextView = null;
     TextView hijackTextView = null;
-    private static int[] mSampleRates = new int[]{8000, 11025, 22050, 44100};
+    private static int[] mSampleRates = new int[] {8000, 11025, 22050, 44100};
     AudioRecord _aru = null;
     AudioReceiver reader = null;
     short[] buffer = null;
@@ -60,29 +60,28 @@ public class Main extends Activity {
             }
         //processInputBuffer(shortsRead2);
         dataTextView.setText(text);
-        WriteToFile(text);
-
-
     }
 
     public void clearClick(View v) {
         dataTextView.setText("");
         data.clear();
+        hijackTextView.setText("");
     }
 
     public void processClick(View v) {
         if (reader != null)
         {
-            List<Integer> freqs = reader.fakeAudioRead();
+            reader.startAudioIO();
+            List<Integer> freqs = reader.fakeAudioRead(data); // This function
             if (freqs.size() != 0)
             {
-                String text = "";
+                String text = "HiJack Data:";
                 for (int i : freqs)
-                    text = text + String.valueOf(i);
+                    text = text + "\n" + String.valueOf(i);
                 hijackTextView.setText(text);
             }
             else
-                hijackTextView.setText("No freqs read :(");
+                hijackTextView.setText("No frequencies read :(");
         }
         else {
             hijackTextView.setText("Reader object null.");
@@ -125,14 +124,6 @@ public class Main extends Activity {
         {
         }
     }
-
-    /*
-    private AudioRecord initAudio4k()
-    {
-        int bufferSize = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_8BIT);
-        return new AudioRecord(MediaRecorder.AudioSource.DEFAULT, 44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_8BIT, bufferSize);
-    }
-    */
 
     private AudioRecord findAudioRecord()
     {
