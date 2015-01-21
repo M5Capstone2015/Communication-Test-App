@@ -53,7 +53,7 @@ public class Main extends Activity {
         String text = "";
         if (buffer.length > 10)
             for (int i = 0; i < shortsRead; i++) {
-                data.add(1);
+                data.add(buffer[i]);
                 String num = "" + i;
                 String val = Short.toString(buffer[i]);
                 text += "\n" + num + ", " + val;
