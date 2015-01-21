@@ -15,14 +15,19 @@ import android.widget.TextView;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Main extends Activity {
 
     TextView dataTextView = null;
+    TextView hijackTextView = null;
     private static int[] mSampleRates = new int[]{8000, 11025, 22050, 44100};
     AudioRecord _aru = null;
+    AudioReceiver reader = null;
     short[] buffer = null;
+    List<Short> data = new ArrayList<Short>();
 
     public void saveClick(View v) {
         String text = dataTextView.getText().toString();
@@ -30,20 +35,25 @@ public class Main extends Activity {
     }
 
     public void readClick(View v) {
+        int shortsRead = 0;
         // Run AudioRecord and Save to file. Print average to and num read.
-        if (_aru != null) {
+        if (_aru != null)
+        {
             _aru.startRecording();
-            int shortsRead = _aru.read(buffer, 0, buffer.length);
-            double average = Average(buffer);
+            shortsRead = _aru.read(buffer, 0, buffer.length);
+
+            //double average = Average(buffer);
             //textView.setText(String.valueOf(shortsRead) + "\nAverage: " + String.valueOf(average));
         }
-        else {
+        else
+        {
             //textView.setText("AudioRecord is null");
         }
 
         String text = "";
         if (buffer.length > 10)
-            for (int i = 0; i < 300; i++) {
+            for (int i = 0; i < shortsRead; i++) {
+                data.add(1);
                 String num = "" + i;
                 String val = Short.toString(buffer[i]);
                 text += "\n" + num + ", " + val;
@@ -56,8 +66,27 @@ public class Main extends Activity {
     }
 
     public void clearClick(View v) {
-        //textView.setText("");
         dataTextView.setText("");
+        data.clear();
+    }
+
+    public void processClick(View v) {
+        if (reader != null)
+        {
+            List<Integer> freqs = reader.fakeAudioRead();
+            if (freqs.size() != 0)
+            {
+                String text = "";
+                for (int i : freqs)
+                    text = text + String.valueOf(i);
+                hijackTextView.setText(text);
+            }
+            else
+                hijackTextView.setText("No freqs read :(");
+        }
+        else {
+            hijackTextView.setText("Reader object null.");
+        }
     }
 
     private void initialize()
@@ -66,8 +95,9 @@ public class Main extends Activity {
                 AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
         buffer = new short[recBufferSize * 10];
         _aru = findAudioRecord();
-        //_aru = initAudio4k();
+        reader = new AudioReceiver(_aru);
         dataTextView = (TextView) findViewById(R.id.dataText);
+        hijackTextView = (TextView) findViewById(R.id.hijackData);
     }
 
     private double Average(short[] bytes)
@@ -96,11 +126,13 @@ public class Main extends Activity {
         }
     }
 
+    /*
     private AudioRecord initAudio4k()
     {
         int bufferSize = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_8BIT);
         return new AudioRecord(MediaRecorder.AudioSource.DEFAULT, 44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_8BIT, bufferSize);
     }
+    */
 
     private AudioRecord findAudioRecord()
     {

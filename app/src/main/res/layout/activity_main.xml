@@ -34,6 +34,13 @@
             android:text="Save"
             android:onClick="saveClick"
             android:id="@+id/button3" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Process"
+            android:onClick="processClick"
+            android:id="@+id/processButton" />
     </LinearLayout>
 
     <ScrollView
@@ -47,5 +54,17 @@
             android:text="Data Here..."
             android:id="@+id/dataText" />
     </ScrollView>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView2" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Data Here..."
+            android:id="@+id/hijackData" />
+    </ScrollView>
+
 
 </LinearLayout>
