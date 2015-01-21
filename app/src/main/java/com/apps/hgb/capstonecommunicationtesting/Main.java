@@ -23,6 +23,7 @@ public class Main extends Activity {
 
     TextView dataTextView = null;
     TextView hijackTextView = null;
+    TextView phoneDataTextView = null;
     private static int[] mSampleRates = new int[] {8000, 11025, 22050, 44100};
     AudioRecord _aru = null;
     AudioReceiver reader = null;
@@ -64,27 +65,31 @@ public class Main extends Activity {
 
     public void clearClick(View v) {
         dataTextView.setText("");
-        data.clear();
         hijackTextView.setText("");
+        data.clear();
     }
 
     public void processClick(View v) {
         if (reader != null)
         {
             reader.startAudioIO();
-            List<Integer> freqs = reader.fakeAudioRead(data); // This function
-            if (freqs.size() != 0)
-            {
-                String text = "HiJack Data:";
-                for (int i : freqs)
-                    text = text + "\n" + String.valueOf(i);
-                hijackTextView.setText(text);
-            }
-            else
-                hijackTextView.setText("No frequencies read :(");
+
+            long startTime = System.nanoTime(); // Start timer
+            List<Integer> freqs = reader.fakeAudioRead(data);
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime) /1000000;
+
+            String text = "\nHiJack Data:";
+            text += ("\nNum freq coefficients:  " + String.valueOf(freqs.size()));
+            text += ("\nCalculation time:" + String.valueOf(duration) + " ms");
+
+            for (int i : freqs)
+                text = text + "\n" + String.valueOf(i);
+
+            hijackTextView.setText(text);
         }
         else {
-            hijackTextView.setText("Reader object null.");
+            hijackTextView.setText("\nReader object null.");
         }
     }
 
@@ -95,8 +100,13 @@ public class Main extends Activity {
         buffer = new short[recBufferSize * 10];
         _aru = findAudioRecord();
         reader = new AudioReceiver(_aru);
+
         dataTextView = (TextView) findViewById(R.id.dataText);
         hijackTextView = (TextView) findViewById(R.id.hijackData);
+        phoneDataTextView = (TextView) findViewById(R.id.phoneData);
+
+        int fre =_aru.getSampleRate();
+        phoneDataTextView.setText("Sample Frequency:  " + String.valueOf(fre));
     }
 
     private double Average(short[] bytes)
