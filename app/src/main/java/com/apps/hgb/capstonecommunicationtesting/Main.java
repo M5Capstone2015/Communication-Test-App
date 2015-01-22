@@ -51,9 +51,11 @@ public class Main extends Activity {
             //textView.setText("AudioRecord is null");
         }
 
+        data.clear();
         String text = "";
         if (buffer.length > 10)
-            for (int i = 0; i < shortsRead; i++) {
+            for (int i = 0; i < shortsRead; i++)
+            {
                 data.add(buffer[i]);
                 String num = "" + i;
                 String val = Short.toString(buffer[i]);
