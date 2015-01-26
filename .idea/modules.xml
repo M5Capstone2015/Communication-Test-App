@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CapstoneCommunicationTesting.iml" filepath="$PROJECT_DIR$/CapstoneCommunicationTesting.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Communication-Test-App.iml" filepath="$PROJECT_DIR$/Communication-Test-App.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ComTesting.iml" filepath="$PROJECT_DIR$/ComTesting.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
